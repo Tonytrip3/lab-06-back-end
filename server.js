@@ -1,4 +1,5 @@
 'use strict';
+let weeklyArr = [];
 
 const express = require('express');
 const cors = require('cors');
@@ -39,22 +40,26 @@ function Location(location){
 app.get('/weather', (request, response) => {
   const weatherData = dailyForecast(request.query.data);
 
-  response.send(weatherData);
-
+  response.send(weeklyArr);
 })
 
 //New weather objects
 function dailyForecast(query) {
   const darkskyData = require('./data/darksky.json');
-  const weather = new Weather(darkskyData.hourly.data[0]);
-  return weather;
+  for(let i in darkskyData.daily.data) {
+  const weather = new Weather(darkskyData.daily.data[i]);
+  weeklyArr.push(weather);
+  
+  }
+
 }
 
 
 //Create constructor function
 function Weather(weather) {
-  this.forecast = hourly.data.summary;
-  this.time = hourly.data.time;
+  this.forecast = weather.summary;
+  this.time = weather.time;
+ 
 }
 
 //Give error message if incorrect
