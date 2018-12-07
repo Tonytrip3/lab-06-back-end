@@ -6,7 +6,7 @@ const cors = require('cors');
 //Load env vars
 require('dotenv').config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 //app
 const app = express();
@@ -34,7 +34,30 @@ function Location(location){
   this.longitude = location.geometry.location.lng;
 }
 
-//Give error message if incorrect;
+//Get weather data
+
+app.get('/weather', (request, response) => {
+  const weatherData = dailyForecast(request.query.data);
+
+  response.send(weatherData);
+
+})
+
+//New weather objects
+function dailyForecast(query) {
+  const darkskyData = require('./data/darksky.json');
+  const weather = new Weather(darkskyData.hourly.data[0]);
+  return weather;
+}
+
+
+//Create constructor function
+function Weather(weather) {
+  this.forecast = hourly.data.summary;
+  this.time = hourly.data.time;
+}
+
+//Give error message if incorrect
 
 app.get('/*', function(req, res){
   res.status(404).send('you are in the wrong place');
