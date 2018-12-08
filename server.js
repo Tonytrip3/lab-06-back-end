@@ -4,6 +4,9 @@ let weeklyArr = [];
 const express = require('express');
 const cors = require('cors');
 
+//Converts Unix timestamp
+let currentDate = new Date(null);
+
 //Load env vars
 require('dotenv').config();
 
@@ -58,7 +61,8 @@ function dailyForecast(query) {
 //Create constructor function
 function Weather(weather) {
   this.forecast = weather.summary;
-  this.time = weather.time;
+  currentDate.setTime(weather.time * 1000);
+  this.time = currentDate.toLocaleString();
  
 }
 
